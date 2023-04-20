@@ -4,6 +4,9 @@ const pharmacyProductSchema = new mongoose.Schema({
     productId:{
         type:String,
     },
+    track:{
+        type:Boolean,
+    },
     link:{
         type: String,
         required:true

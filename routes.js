@@ -4,6 +4,6 @@ const productsController=require('./controllers/productsController')
 
 const router = Router(); 
 
-router.use('/products', productsController)
+router.use('/all-products', productsController)
 
 module.exports=router
