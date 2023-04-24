@@ -67,7 +67,14 @@ const pharmacyProductSchema = new mongoose.Schema({
     ],
     matchedProducts:[
         {
-            matchedProductId:mongoose.SchemaTypes.ObjectId,
+            matchedProductId: mongoose.SchemaTypes.ObjectId,
+            productId: String,
+            title: String,
+            link: String,
+            prices: Object,
+            retailCompany: String,
+            areEqual: Boolean,
+            track:Boolean
         }
     ]
 })

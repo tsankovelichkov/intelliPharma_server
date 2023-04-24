@@ -82,6 +82,15 @@ router.get("/:retailCompany/matched-products/:productId", async (req, res) => {
             elObj[0].image = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"
         }
 
+        if (readyForUseData[0].matchedProducts[index].track === undefined) {
+            elObj[0].track = false
+        } else {
+            if(readyForUseData[0].matchedProducts[index].track) {
+                elObj[0].track = true
+            } else {
+                elObj[0].track = false
+            }
+        }
 
         resultArray.push(elObj[0])
 
@@ -91,12 +100,25 @@ router.get("/:retailCompany/matched-products/:productId", async (req, res) => {
     res.json(resultArray)
 })
 
+router.put("/:retailCompany/matched-products/:productId/update", async (req, res) => {
+
+    PharmacyProduct.findOneAndUpdate(
+        {
+            "_id": `${req.params.productId}`,
+            "retailCompany": `${req.params.retailCompany}`,
+            "matchedProducts.matchedProductId": `${req.body.id}`
+        },
+        { "$set": { "matchedProducts.$.track": `${req.body.track}` } }
+    ).then(response => res.json({ updated: true }))
+        .catch(err => res.json({ updated: false }))
+})
+
 router.put("/:productId/update", (req, res) => {
     let updateData = req.body;
 
     PharmacyProduct.findByIdAndUpdate(req.params.productId, updateData)
-        .then(response => res.json({updated:true}))
-        .catch(err => res.json({updated:false}))
+        .then(response => res.json({ updated: true }))
+        .catch(err => res.json({ updated: false }))
 })
 
 
