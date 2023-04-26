@@ -59,6 +59,14 @@ router.get("/:retailCompany/:productId", async (req, res) => {
     res.json(readyForUseData)
 })
 
+router.put("/:productId/update", (req, res) => {
+    let updateData = req.body;
+
+    PharmacyProduct.findByIdAndUpdate(req.params.productId, updateData)
+        .then(response => res.json({updated:true}))
+        .catch(err => res.json({updated:false}))
+})
+
 router.get("/:retailCompany/matched-products/:productId", async (req, res) => {
     let productData = await PharmacyProduct.find({ _id: req.params.productId, retailCompany: req.params.retailCompany })
 
