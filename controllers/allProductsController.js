@@ -63,8 +63,8 @@ router.put("/:productId/update", (req, res) => {
     let updateData = req.body;
 
     PharmacyProduct.findByIdAndUpdate(req.params.productId, updateData)
-        .then(response => res.json({updated:true}))
-        .catch(err => res.json({updated:false}))
+        .then(response => res.json({ updated: true }))
+        .catch(err => res.json({ updated: false }))
 })
 
 router.get("/:retailCompany/matched-products/:productId", async (req, res) => {
@@ -93,7 +93,7 @@ router.get("/:retailCompany/matched-products/:productId", async (req, res) => {
         if (readyForUseData[0].matchedProducts[index].track === undefined) {
             elObj[0].track = false
         } else {
-            if(readyForUseData[0].matchedProducts[index].track) {
+            if (readyForUseData[0].matchedProducts[index].track) {
                 elObj[0].track = true
             } else {
                 elObj[0].track = false
@@ -110,15 +110,39 @@ router.get("/:retailCompany/matched-products/:productId", async (req, res) => {
 
 router.put("/:retailCompany/matched-products/:productId/update", async (req, res) => {
 
-    PharmacyProduct.findOneAndUpdate(
-        {
-            "_id": `${req.params.productId}`,
-            "retailCompany": `${req.params.retailCompany}`,
-            "matchedProducts.matchedProductId": `${req.body.id}`
-        },
-        { "$set": { "matchedProducts.$.track": `${req.body.track}` } }
-    ).then(response => res.json({ updated: true }))
-        .catch(err => res.json({ updated: false }))
+    let isTracked = false
+
+    let track = req.body.track === "true" ? true : false
+
+    if (track) {
+        let productData = await PharmacyProduct.find({ _id: req.params.productId })
+
+        let readyForUseData = JSON.parse(JSON.stringify(productData))[0]
+
+        isTracked = false
+
+
+        readyForUseData.matchedProducts.forEach(obj => {
+            if (obj.track && obj.retailCompany === req.body.retailCompany) {
+                isTracked = true
+            }
+        })
+    }
+
+    if (!isTracked) {
+
+        PharmacyProduct.findOneAndUpdate(
+            {
+                "_id": `${req.params.productId}`,
+                "retailCompany": `${req.params.retailCompany}`,
+                "matchedProducts.matchedProductId": `${req.body.id}`
+            },
+            { "$set": { "matchedProducts.$.track": `${track}` } }
+        ).then(response => res.json({ updated: true }))
+            .catch(err => res.json({ updated: false }))
+    } else {
+        res.json({ updated: false })
+    }
 })
 
 router.put("/:productId/update", (req, res) => {

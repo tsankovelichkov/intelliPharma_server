@@ -35,8 +35,6 @@ router.get("/:retailCompany", async (req, res) => {
         let targetMatchedProducts = el.matchedProducts
         targetMatchedProducts = el.matchedProducts.filter(el => el.track === true)
 
-        let matchedProductsResultArray = []
-
         for (let index = 0; index < targetMatchedProducts.length; index++) {
             const element = targetMatchedProducts[index];
 
@@ -55,8 +53,6 @@ router.get("/:retailCompany", async (req, res) => {
 
             let result = JSON.stringify(elData[0])
             let targetObj = JSON.parse(result)
-
-            console.log(targetObj)
 
             for (const key in targetObj) {
                 if(key !== "_id"){
