@@ -141,13 +141,16 @@ router.put("/:retailCompany/matched-products/:productId/update", async (req, res
         ).then(response => res.json({ updated: true }))
             .catch(err => res.json({ updated: false }))
     } else {
-        res.json({ updated: false })
+        res.json({ 
+            updated: false ,
+            type:"ONLY-ONE-FROM-THE-SAME-RETAIL-COMPANY"
+        })
     }
 })
 
 router.put("/:productId/update", (req, res) => {
     let updateData = req.body;
-
+    
     PharmacyProduct.findByIdAndUpdate(req.params.productId, updateData)
         .then(response => res.json({ updated: true }))
         .catch(err => res.json({ updated: false }))
