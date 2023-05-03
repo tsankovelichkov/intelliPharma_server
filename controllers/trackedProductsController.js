@@ -66,7 +66,6 @@ router.get("/:retailCompany", async (req, res) => {
             }
         }
         resultArray.push(el)
-        
     }
 
     res.json(resultArray)

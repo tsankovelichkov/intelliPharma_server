@@ -12,10 +12,7 @@ router.get("/:retailCompany", async (req, res) => {
 
         el.id = el._id
         el.regularPrice = el.prices.regularPrice
-
-        if (el.prices.discountPrice > 0) {
-            el.discountPrice = el.prices.discountPrice
-        }
+        el.discountPrice = el.prices.discountPrice
 
         if (el.image === "IMAGE IS MISSING") {
             el.image = "https://t4.ftcdn.net/jpg/04/73/25/49/360_F_473254957_bxG9yf4ly7OBO5I0O5KABlN930GwaMQz.jpg"
